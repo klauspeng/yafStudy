@@ -9,6 +9,7 @@
  */
 class Bootstrap extends Yaf\Bootstrap_Abstract
 {
+    private $arrConfig = null;
 
     public function _initConfig()
     {
