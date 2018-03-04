@@ -7,6 +7,9 @@
  * 这些方法, 都接受一个参数:Yaf\Dispatcher $dispatcher
  * 调用的次序, 和申明的次序相同
  */
+
+use \think\Db;
+
 class Bootstrap extends Yaf\Bootstrap_Abstract
 {
     private $arrConfig = null;
@@ -28,14 +31,28 @@ class Bootstrap extends Yaf\Bootstrap_Abstract
     //载入数据库
     public function _initDatabase()
     {
-        $db_config['hostname']    = $this->arrConfig->db->hostname;
-        $db_config['username']    = $this->arrConfig->db->username;
-        $db_config['password']    = $this->arrConfig->db->password;
-        $db_config['database']    = $this->arrConfig->db->database;
-        $db_config['log']         = $this->arrConfig->db->log;
-        $db_config['logfilepath'] = $this->arrConfig->db->logfilepath;
-
-        // Yaf\Registry::set('db', new Db($db_config));
+        $dbConfig = [
+            // 数据库类型
+            'type' => 'mysql',
+            // 服务器地址
+            'hostname' => $this->arrConfig->db->hostname,
+            // 数据库名
+            'database' => $this->arrConfig->db->database,
+            // 数据库用户名
+            'username' => $this->arrConfig->db->username,
+            // 数据库密码
+            'password' => $this->arrConfig->db->password,
+            // 数据库连接端口
+            'hostport' => 3306,
+            // 数据库连接参数
+            'params' => [],
+            // 数据库编码默认采用utf8
+            'charset' => 'utf8',
+            // 数据库表前缀
+            'prefix' => $this->arrConfig->db->logfilepath,
+        ];
+        Db::setConfig($dbConfig);
+        Yaf\Registry::set('db', new Db());
     }
 
     //载入缓存类rEDIS
@@ -62,6 +79,6 @@ class Bootstrap extends Yaf\Bootstrap_Abstract
         //在这里注册自己的view控制器，例如smarty,firekylin
         $config = Yaf\Registry::get("config")->get("smarty");
         $smarty = new Smarty_Adapter(null, $config);
-        Yaf\Dispatcher::getInstance()->setView($smarty);
+        $dispatcher->setView($smarty);
     }
 }
