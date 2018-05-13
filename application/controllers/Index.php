@@ -1,19 +1,18 @@
 <?php
 
-class IndexController extends Yaf\Controller_Abstract
+class IndexController extends Yaf_Controller_Abstract
 {
     public function indexAction()
     {
-        $db= Yaf\Registry::get('db');
+        $db = \Yaf_Registry::get('db');
         $config = $db::getConfig();
-        var_dump($config);
-        //默认Action
+        // 默认Action
         $this->getView()->assign("content", "Hello World");
     }
 
     public function textAction()
     {
-        dump(111);
-        var_dump(222);
+        // 单行注释测试
+        var_dump('倍儿爽！');
     }
 }

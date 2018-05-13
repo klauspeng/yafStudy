@@ -1,6 +1,6 @@
 <?php
 
-class CategoryController extends Yaf\Controller_Abstract
+class CategoryController extends Yaf_Controller_Abstract
 {
     public function indexAction()
     {

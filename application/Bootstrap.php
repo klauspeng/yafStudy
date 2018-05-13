@@ -4,28 +4,28 @@
  * @name Bootstrap
  * @author root
  * @desc 所有在Bootstrap类中, 以_init开头的方法, 都会被Yaf调用,
- * 这些方法, 都接受一个参数:Yaf\Dispatcher $dispatcher
+ * 这些方法, 都接受一个参数:Yaf_Dispatcher $dispatcher
  * 调用的次序, 和申明的次序相同
  */
 
 use \think\Db;
 
-class Bootstrap extends Yaf\Bootstrap_Abstract
+class Bootstrap extends Yaf_Bootstrap_Abstract
 {
     private $arrConfig = null;
 
     public function _initConfig()
     {
         //把配置保存起来
-        $this->arrConfig = Yaf\Application::app()->getConfig();
-        Yaf\Registry::set('config', $this->arrConfig);
+        $this->arrConfig = Yaf_Application::app()->getConfig();
+        Yaf_Registry::set('config', $this->arrConfig);
     }
 
 
     //载入方法库
     public function _initLibrary()
     {
-        Yaf\Loader::import('Function.php');
+        Yaf_Loader::import('Function.php');
     }
 
     //载入数据库
@@ -52,7 +52,7 @@ class Bootstrap extends Yaf\Bootstrap_Abstract
             'prefix' => $this->arrConfig->db->logfilepath,
         ];
         Db::setConfig($dbConfig);
-        Yaf\Registry::set('db', new Db());
+        Yaf_Registry::set('db', new Db());
     }
 
     //载入缓存类rEDIS
@@ -60,24 +60,24 @@ class Bootstrap extends Yaf\Bootstrap_Abstract
     {
         $cache_config['port'] = $this->arrConfig->cache->port;
         $cache_config['host'] = $this->arrConfig->cache->host;
-        // Yaf\Registry::set('redis', new Rdb($cache_config));
+        // Yaf_Registry::set('redis', new Rdb($cache_config));
     }
 
-    public function _initPlugin(Yaf\Dispatcher $dispatcher)
+    public function _initPlugin(Yaf_Dispatcher $dispatcher)
     {
         //注册一个插件
     }
 
-    public function _initRoute(Yaf\Dispatcher $dispatcher)
+    public function _initRoute(Yaf_Dispatcher $dispatcher)
     {
 
         //在这里注册自己的路由协议,默认使用简单路由
     }
 
-    public function _initView(Yaf\Dispatcher $dispatcher)
+    public function _initView(Yaf_Dispatcher $dispatcher)
     {
         //在这里注册自己的view控制器，例如smarty,firekylin
-        $config = Yaf\Registry::get("config")->get("smarty");
+        $config = Yaf_Registry::get("config")->get("smarty");
         $smarty = new Smarty_Adapter(null, $config);
         $dispatcher->setView($smarty);
     }
