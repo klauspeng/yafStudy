@@ -33,7 +33,7 @@ class Bootstrap extends Yaf_Bootstrap_Abstract
     {
         $dbConfig = [
             // 数据库类型
-            'type' => 'mysql',
+            'type'     => 'mysql',
             // 服务器地址
             'hostname' => $this->arrConfig->db->hostname,
             // 数据库名
@@ -45,11 +45,11 @@ class Bootstrap extends Yaf_Bootstrap_Abstract
             // 数据库连接端口
             'hostport' => 3306,
             // 数据库连接参数
-            'params' => [],
+            'params'   => [],
             // 数据库编码默认采用utf8
-            'charset' => 'utf8',
+            'charset'  => 'utf8',
             // 数据库表前缀
-            'prefix' => $this->arrConfig->db->logfilepath,
+            'prefix'   => $this->arrConfig->db->logfilepath,
         ];
         Db::setConfig($dbConfig);
         Yaf_Registry::set('db', new Db());
@@ -78,9 +78,20 @@ class Bootstrap extends Yaf_Bootstrap_Abstract
 
     public function _initView(Yaf_Dispatcher $dispatcher)
     {
-        //在这里注册自己的view控制器，例如smarty,firekylin
-        $config = Yaf_Registry::get("config")->get("smarty");
-        $smarty = new Smarty_Adapter(null, $config);
-        $dispatcher->setView($smarty);
+        if (!$dispatcher->getRequest()->isCli()) {
+            //在这里注册自己的view控制器，例如smarty,firekylin
+
+            $uri = $dispatcher->getRequest()->getRequestUri();
+
+            if (strpos($uri,'admin') !== false) {
+                $config = Yaf_Registry::get("config")->get("admin");
+            } else {
+                $config = Yaf_Registry::get("config")->get("smarty");
+            }
+
+            $smarty = new Smarty_Adapter(null, $config);
+            $dispatcher->setView($smarty);
+        }
+
     }
 }
